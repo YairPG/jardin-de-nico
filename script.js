@@ -7,6 +7,7 @@ const emojiDisco = document.getElementById('emoji-disco');
 const overlay = document.getElementById('visualizer-overlay');
 const caja = document.getElementById('caja-dinamica');
 
+// Nuevas variables para los controles
 const controlesMusica = document.getElementById('controles-musica');
 const btnPlayPause = document.getElementById('btn-play-pause');
 const iconPlay = document.getElementById('icon-play');
@@ -26,7 +27,7 @@ const ambientes = {
     'carry': { fondo: '#f8f9fa', color: '#adb5bd', titulo: 'Carry You Home', emojis: ['🏠', '🕯️', '🫂'], frase: 'Estaré ahí para llevarte a casa.' }
 };
 
-// LÓGICA DE CONTROLES
+// --- LÓGICA DE CONTROLES ---
 reproductor.addEventListener('timeupdate', () => {
     const porcentaje = (reproductor.currentTime / reproductor.duration) * 100;
     progressBar.value = porcentaje || 0;
@@ -89,6 +90,7 @@ function reproducir(url, tipo) {
     initAudio();
     if (audioCtx.state === 'suspended') audioCtx.resume();
     
+    // Mostrar controles al iniciar música
     controlesMusica.classList.remove('oculto');
     controlesMusica.classList.add('visible');
 
