@@ -1,0 +1,9 @@
+/* Importar Reset y Variables */
+@import "main.css";
+
+/* Importar Estructura Base */
+@import "layout.css";
+
+/* Importar Componentes Específicos */
+@import "player.css";
+@import "lyrics.css";

@@ -1,0 +1,93 @@
+#vinilo-container { 
+    position: absolute; width: 210px; height: 210px; z-index: 5; 
+    left: 50%; top: 50%; transform: translate(-50%, -50%); 
+    transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+
+#vinilo-container.active { transform: translate(45%, -50%); }
+
+.disco { 
+    width: 200px; height: 200px; background: #111; 
+    border-radius: 50%; display: flex; justify-content: center; 
+    align-items: center; background: repeating-radial-gradient(circle, #222, #222 5px, #111 6px); 
+}
+
+.etiqueta-disco { 
+    width: 70px; height: 70px; border-radius: 50%; 
+    border: 3px solid white; display: flex; justify-content: center; 
+    align-items: center; font-size: 1.8rem; 
+}
+
+.girar { animation: girarDisco 3s linear infinite; }
+@keyframes girarDisco { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.grid-cajitas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; }
+.cajita { 
+    background: white; width: 60px; height: 60px; border-radius: 18px; 
+    display: flex; justify-content: center; align-items: center; 
+    font-size: 1.6rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+    transition: 0.4s; 
+}
+
+.player-controls { margin-top: 15px; padding: 12px; background: rgba(0, 0, 0, 0.05); border-radius: 25px; }
+
+/* FIX: Icono de volumen y contenedor */
+.volume-container { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    justify-content: center; 
+    margin-top: 10px; 
+}
+
+.icon-vol { 
+    width: 20px !important; 
+    height: 20px !important; 
+    min-width: 20px;
+    fill: var(--primary); 
+}
+
+.btn-control { 
+    background: var(--primary); border: none; 
+    width: 50px; height: 50px; border-radius: 50%; 
+    cursor: pointer; display: flex; justify-content: center; 
+    align-items: center; margin: 5px auto; 
+}
+
+/* FIX: Emojis independientes del movimiento del disco */
+.emoji-particula { 
+    position: fixed; 
+    top: -50px;
+    pointer-events: none; 
+    z-index: 100; 
+}
+/* Añadir esto al final de player.css */
+
+.cajita {
+    background: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.6rem;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid transparent;
+}
+
+/* Efecto Retroiluminado al seleccionar */
+.cajita.selected {
+    border-color: var(--primary);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px var(--primary), 0 0 40px rgba(74, 144, 226, 0.3);
+    background: #fff;
+}
+
+body.dark-mode .cajita.selected {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+    box-shadow: 0 0 20px #fff, 0 0 40px rgba(255, 255, 255, 0.2);
+}

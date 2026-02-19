@@ -1,0 +1,28 @@
+:root { 
+    --primary: #4a90e2; 
+    --accent: #00f2fe; 
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body { 
+    font-family: 'Segoe UI', sans-serif; 
+    background: #f0f7ff; 
+    height: 100vh; 
+    overflow: hidden; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    transition: background 1.5s ease; 
+}
+
+#visualizer-overlay { 
+    position: fixed; 
+    inset: 0; 
+    pointer-events: none; 
+    z-index: 1; 
+}

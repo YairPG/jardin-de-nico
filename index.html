@@ -2,18 +2,17 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Jardín musical de Nico 💙</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
     <div id="visualizer-overlay"></div>
 
     <div id="pantalla-inicio">
         <div class="card-inicio">
             <h1>Hola, morcito, mira :3🌼!!</h1>
-            <p>Hice esto para tí, no se si por ahora sigues de viaje y no queria que te quedes sin regalo de San Valentín. Te amo muchoo!!</p>
+            <p>Hice esto para tí... Te amo muchoo!!</p>
             <button id="btn-entrar" class="btn-principal">Entrar al jardín</button>
         </div>
     </div>
@@ -21,7 +20,6 @@
     <div id="contenido-principal" class="hidden">
         <div class="main-wrapper">
             <div class="estuche-container">
-                
                 <div id="vinilo-container">
                     <div class="disco" id="disco-fisico">
                         <div class="etiqueta-disco" id="etiqueta-color">
@@ -31,36 +29,35 @@
                 </div>
 
                 <div class="contenedor-mensaje" id="caja-dinamica">
-                    <h2 id="titulo-musica">Canciones que alguna vez escuchaste...</h2>
-                    <p id="subtitulo-musica">Selecciona un emoji para reproducir</p>
+                    <h2 id="titulo-musica">El Jardín de Nico</h2>
+                    
+                    <div id="contenedor-lyrics">
+                        <div id="lyrics-scroll">
+                            <p id="subtitulo-musica" class="lyric-line">Selecciona un emoji para reproducir</p>
+                        </div>
+                    </div>
                     
                     <div class="grid-cajitas">
-                        <div class="cajita" id="btn-disename" onclick="reproducir('https://files.catbox.moe/4tvfu4.mp3', 'disename')">✍️</div>
-                        <div class="cajita" id="btn-besos" onclick="reproducir('https://files.catbox.moe/qpymsq.mp3', 'besos')">🔥</div>
-                        <div class="cajita" id="btn-triste" onclick="reproducir('https://files.catbox.moe/8mmlln.mp3', 'triste')">📺</div>
-                        <div class="cajita" id="btn-ordinary" onclick="reproducir('https://files.catbox.moe/gek4ir.mp3', 'ordinary')">✨</div>
-                        <div class="cajita" id="btn-gone" onclick="reproducir('https://files.catbox.moe/femogv.mp3', 'gone')">🎸</div>
-                        <div class="cajita" id="btn-carry" onclick="reproducir('https://files.catbox.moe/v355m3.mp3', 'carry')">🏠</div>
+                        <div class="cajita btn-song" data-id="disename">✍️</div>
+                        <div class="cajita btn-song" data-id="besos">🔥</div>
+                        <div class="cajita btn-song" data-id="triste">📺</div>
+                        <div class="cajita btn-song" data-id="ordinary">✨</div>
+                        <div class="cajita btn-song" data-id="gone">🎸</div>
+                        <div class="cajita btn-song" data-id="carry">🏠</div>
                     </div>
 
                     <div id="controles-musica" class="player-controls oculto">
                         <input type="range" id="progress-bar" value="0" max="100">
-                        
                         <div class="main-controls">
                             <button id="btn-play-pause" class="btn-control">
                                 <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                 <svg id="icon-pause" class="hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                             </button>
                         </div>
-
                         <div class="volume-container">
                             <svg class="icon-vol" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
                             <input type="range" id="volume-slider" value="80" max="100">
                         </div>
-                    </div>
-
-                    <div class="creditos">
-                        <p>© 2026 | Hecho con ❤️ por <strong>Yair</strong> & <strong>Gemini</strong> ✨</p>
                     </div>
                 </div>
             </div>
@@ -68,6 +65,6 @@
     </div>
 
     <audio id="reproductor" crossorigin="anonymous"></audio>
-    <script src="script.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>
