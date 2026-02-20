@@ -5,19 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Jardín musical de Nico 💙</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <div id="visualizer-overlay"></div>
-
-    <div id="pantalla-inicio">
-        <div class="card-inicio">
-            <h1>Hola, morcito, mira :3🌼!!</h1>
-            <p>Hice esto para tí... Te amo muchoo!!</p>
-            <button id="btn-entrar" class="btn-principal">Entrar al jardín</button>
-        </div>
-    </div>
-
-    <div id="contenido-principal" class="hidden">
+    <div id="contenido-principal">
         <div class="main-wrapper">
             <div class="estuche-container">
                 <div id="vinilo-container">
@@ -29,33 +21,64 @@
                 </div>
 
                 <div class="contenedor-mensaje" id="caja-dinamica">
-                    <h2 id="titulo-musica">El Jardín de Nico</h2>
+                    <div class="header-caja">
+                         <h2 id="titulo-musica">Mi Biblioteca</h2>
+                         <a href="admin.html" class="btn-admin-config">⚙️</a>
+                    </div>
                     
                     <div id="contenedor-lyrics">
                         <div id="lyrics-scroll">
-                            <p id="subtitulo-musica" class="lyric-line">Selecciona un emoji para reproducir</p>
+                            <p id="subtitulo-musica" class="lyric-line">Selecciona una canción</p>
                         </div>
                     </div>
                     
-                    <div class="grid-cajitas">
-                        <div class="cajita btn-song" data-id="disename">✍️</div>
-                        <div class="cajita btn-song" data-id="besos">🔥</div>
-                        <div class="cajita btn-song" data-id="triste">📺</div>
-                        <div class="cajita btn-song" data-id="ordinary">✨</div>
-                        <div class="cajita btn-song" data-id="gone">🎸</div>
-                        <div class="cajita btn-song" data-id="carry">🏠</div>
+                    <div class="playlist-wrapper">
+                        <div id="lista-canciones" class="playlist-scroll"></div>
                     </div>
 
                     <div id="controles-musica" class="player-controls oculto">
-                        <input type="range" id="progress-bar" value="0" max="100">
-                        <div class="main-controls">
-                            <button id="btn-play-pause" class="btn-control">
-                                <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                <svg id="icon-pause" class="hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                            </button>
+                        <div class="timeline-container">
+                            <input type="range" id="progress-bar" value="0" max="100">
+                            <div class="time-labels">
+                                <span id="time-current">0:00</span>
+                                <span id="time-total">0:00</span>
+                            </div>
                         </div>
-                        <div class="volume-container">
-                            <svg class="icon-vol" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+
+                        <div class="main-controls-row">
+                            <button id="btn-mode-cycle" class="btn-icon-only">
+                                <svg id="svg-mode" viewBox="0 0 24 24" width="22"><path id="path-mode" d="M5 12h14M15 8l4 4-4 4"/></svg>
+                            </button>
+
+                            <div class="nav-group">
+                                <button id="btn-prev" class="btn-icon-only">
+                                    <svg viewBox="0 0 24 24" width="28"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                                </button>
+                                <button id="btn-play-pause" class="btn-play-circle">
+                                    <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    <svg id="icon-pause" class="hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                </button>
+                                <button id="btn-next" class="btn-icon-only">
+                                    <svg viewBox="0 0 24 24" width="28"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                                </button>
+                            </div>
+
+                            <div class="timer-box">
+                                <button class="btn-icon-only">
+                                    <svg viewBox="0 0 24 24" width="22"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 18c4.42 0 8-3.58 8-8s-3.58-8-8-8-8 3.58-8 8 3.58 8 8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                                </button>
+                                <select id="sleep-timer" class="timer-hidden-select">
+                                    <option value="0">Off</option>
+                                    <option value="5">5 min</option>
+                                    <option value="15">15 min</option>
+                                    <option value="30">30 min</option>
+                                    <option value="end">Fin</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mini-volume">
+                            <svg viewBox="0 0 24 24" width="14"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg>
                             <input type="range" id="volume-slider" value="80" max="100">
                         </div>
                     </div>
@@ -63,7 +86,6 @@
             </div>
         </div>
     </div>
-
     <audio id="reproductor" crossorigin="anonymous"></audio>
     <script type="module" src="js/main.js"></script>
 </body>

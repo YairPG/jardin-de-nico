@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Panel de Control</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root { --accent: #4a90e2; }
+        body { font-family: sans-serif; background: #f0f2f5; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .admin-card { width: 95%; max-width: 550px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        h2 { margin: 0 0 15px 0; font-size: 1.3rem; color: var(--accent); text-align: center; }
+        .instruction { font-size: 0.72rem; color: #555; background: #f8f9fa; padding: 6px 10px; border-radius: 5px; border-left: 3px solid var(--accent); margin-bottom: 8px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .form-group { margin-bottom: 10px; }
+        label { font-weight: bold; font-size: 0.8rem; display: block; margin-bottom: 3px; }
+        input, textarea, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.85rem; box-sizing: border-box; }
+        textarea { resize: none; height: 80px; font-family: monospace; }
+        .btn-link { font-size: 0.7rem; color: var(--accent); text-decoration: none; font-weight: bold; }
+        .btn-save { background: var(--accent); color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-save:disabled { background: #ccc; }
+        .back-link { font-size: 0.8rem; text-decoration: none; color: #888; display: block; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="admin-card">
+    <a href="index.html" class="back-link">← Volver al Jardín</a>
+    <h2>Añadir Música a la Nube ☁️</h2>
+
+    <form id="song-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Título</label>
+                <input type="text" id="title" placeholder="Nombre canción" required>
+            </div>
+            <div class="form-group">
+                <label>Artista</label>
+                <input type="text" id="artist" placeholder="Nombre artista" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Audio (MP3) <a href="https://catbox.moe/" target="_blank" class="btn-link">↗ Catbox</a></label>
+            <div class="instruction">Pega el link que termina en .mp3</div>
+            <input type="url" id="audio-url" placeholder="https://files.catbox.moe/..." required>
+        </div>
+
+        <div class="form-group">
+            <label>Letra (LRC) <a href="https://lrclib.net/" target="_blank" class="btn-link">↗ LRCLIB</a></label>
+            <div class="instruction">Copia y pega el texto de la letra aquí</div>
+            <textarea id="lrc-text" placeholder="[00:12.00] Letra..." required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Portada (Imagen)</label>
+            <input type="url" id="cover-url" placeholder="Link de la imagen" required>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Emoji</label>
+                <input type="text" id="emoji" placeholder="✨" maxlength="2">
+            </div>
+            <div class="form-group">
+                <label>Fondo</label>
+                <select id="is-dark">
+                    <option value="true">Modo Oscuro</option>
+                    <option value="false">Modo Claro</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit" id="btn-submit" class="btn-save">Guardar en Base de Datos</button>
+    </form>
+</div>
+
+<script type="module">
+    import { supabase } from './js/modules/supabase-client.js';
+
+    // Función para limpiar nombres (Slugify)
+    const slugify = (text) => {
+        return text.toString().toLowerCase()
+            .replace(/\s+/g, '_')           
+            .replace(/ñ/g, 'n')             
+            .normalize("NFD")               
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^\w\-]+/g, '')       
+            .replace(/\-\-+/g, '_');        
+    };
+
+    document.getElementById('song-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-submit');
+        
+        btn.disabled = true;
+        btn.innerText = "Subiendo a la nube...";
+
+        const titulo = document.getElementById('title').value;
+        const artista = document.getElementById('artist').value;
+        const idGenerated = slugify(artista + "_" + titulo);
+
+        const nuevaCancion = {
+            id: idGenerated,
+            titulo: titulo,
+            artista: artista,
+            url_audio: document.getElementById('audio-url').value,
+            url_portada: document.getElementById('cover-url').value,
+            lrc_content: document.getElementById('lrc-text').value,
+            emoji: document.getElementById('emoji').value || "🎵",
+            is_dark: document.getElementById('is-dark').value === "true",
+            color_tema: "#4a90e2" // Color por defecto
+        };
+
+        try {
+            const { error } = await supabase
+                .from('canciones')
+                .insert([nuevaCancion]);
+
+            if (error) throw error;
+
+            alert("¡Canción guardada con éxito!");
+            window.location.href = "index.html";
+
+        } catch (err) {
+            console.error("Error Supabase:", err);
+            alert("Error al guardar: " + (err.message || "Verifica la consola"));
+            btn.disabled = false;
+            btn.innerText = "Reintentar Guardar";
+        }
+    });
+</script>
+
+</body>
+</html>

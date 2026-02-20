@@ -1,19 +1,14 @@
 let lyricsActuales = [];
 let ultimoIndice = -1;
 
-export async function cargarLetraExterna(ruta) {
-    try {
-        const respuesta = await fetch(ruta);
-        const textoLRC = await respuesta.text();
-        lyricsActuales = parsearLRC(textoLRC);
-        return lyricsActuales;
-    } catch (error) {
-        lyricsActuales = [{ t: 0, text: "Letra no disponible ✨" }];
-        return lyricsActuales;
-    }
+// Ahora esta función procesa el texto que viene de la BD directamente
+export function cargarLetrasDesdeTexto(textoLRC) {
+    lyricsActuales = parsearLRC(textoLRC);
+    return lyricsActuales;
 }
 
 function parsearLRC(lrcText) {
+    if (!lrcText) return [{ t: 0, text: "Letra no disponible ✨" }];
     const lineas = lrcText.split('\n');
     const resultado = [];
     const regExp = /\[(\d+):(\d+(\.\d+)?)\](.*)/;
@@ -32,7 +27,6 @@ function parsearLRC(lrcText) {
 
 export function actualizarLyrics(tiempoActual, scrollContainer) {
     let indiceActual = -1;
-
     for (let i = 0; i < lyricsActuales.length; i++) {
         if (tiempoActual >= lyricsActuales[i].t) {
             indiceActual = i;
@@ -41,7 +35,6 @@ export function actualizarLyrics(tiempoActual, scrollContainer) {
 
     if (indiceActual !== -1 && indiceActual !== ultimoIndice) {
         ultimoIndice = indiceActual;
-
         const lineas = scrollContainer.querySelectorAll('.lyric-line');
         lineas.forEach((linea, idx) => {
             linea.classList.toggle('active', idx === indiceActual);
@@ -51,16 +44,10 @@ export function actualizarLyrics(tiempoActual, scrollContainer) {
         if (lineaActiva) {
             const contenedorHeight = 140; 
             const lineaHeight = lineaActiva.offsetHeight;
-            
-            // CORRECCIÓN: Restamos 40px extras al cálculo original para "subir" 
-            // la línea activa a la zona superior del contenedor.
             const offset = -(lineaActiva.offsetTop - (contenedorHeight / 2) + (lineaHeight / 2) + 40);
-            
             scrollContainer.style.transform = `translateY(${offset}px)`;
         }
     }
 }
 
-export function resetIndice() {
-    ultimoIndice = -1;
-}
+export function resetIndice() { ultimoIndice = -1; }

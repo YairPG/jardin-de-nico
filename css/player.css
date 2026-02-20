@@ -1,93 +1,76 @@
-#vinilo-container { 
-    position: absolute; width: 210px; height: 210px; z-index: 5; 
-    left: 50%; top: 50%; transform: translate(-50%, -50%); 
-    transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+/* --- PLAYLIST NEÓN (Recuperado) --- */
+.playlist-scroll { 
+    max-height: 140px; /* Reducido para ahorrar espacio */
+    overflow-y: auto;
+    padding: 5px;
 }
 
-#vinilo-container.active { transform: translate(45%, -50%); }
-
-.disco { 
-    width: 200px; height: 200px; background: #111; 
-    border-radius: 50%; display: flex; justify-content: center; 
-    align-items: center; background: repeating-radial-gradient(circle, #222, #222 5px, #111 6px); 
+.song-item {
+    display: flex; align-items: center; padding: 8px 12px; border-radius: 12px;
+    background: rgba(255, 255, 255, 0.4); margin-bottom: 6px; cursor: pointer;
+    transition: 0.3s; border: 1px solid transparent;
 }
 
-.etiqueta-disco { 
-    width: 70px; height: 70px; border-radius: 50%; 
-    border: 3px solid white; display: flex; justify-content: center; 
-    align-items: center; font-size: 1.8rem; 
+.song-item.selected { 
+    background: white; 
+    border-color: var(--primary); 
+    /* El brillo que querías recuperar */
+    box-shadow: 0 0 12px var(--primary), 0 0 20px rgba(255,255,255,0.4);
 }
 
-.girar { animation: girarDisco 3s linear infinite; }
-@keyframes girarDisco { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.song-name { font-size: 0.85rem; font-weight: bold; color: #222; }
+.song-artist { font-size: 0.7rem; color: #555; }
 
-.grid-cajitas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; }
-.cajita { 
-    background: white; width: 60px; height: 60px; border-radius: 18px; 
-    display: flex; justify-content: center; align-items: center; 
-    font-size: 1.6rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
-    transition: 0.4s; 
+/* --- CONTROLES COMPACTOS --- */
+.player-controls {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 20px;
 }
 
-.player-controls { margin-top: 15px; padding: 12px; background: rgba(0, 0, 0, 0.05); border-radius: 25px; }
+.timeline-container { width: 100%; }
+#progress-bar { width: 100%; height: 4px; cursor: pointer; accent-color: var(--primary); }
+.time-labels { display: flex; justify-content: space-between; font-size: 0.65rem; color: #666; margin-bottom: 8px; }
 
-/* FIX: Icono de volumen y contenedor */
-.volume-container { 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    justify-content: center; 
-    margin-top: 10px; 
-}
-
-.icon-vol { 
-    width: 20px !important; 
-    height: 20px !important; 
-    min-width: 20px;
-    fill: var(--primary); 
-}
-
-.btn-control { 
-    background: var(--primary); border: none; 
-    width: 50px; height: 50px; border-radius: 50%; 
-    cursor: pointer; display: flex; justify-content: center; 
-    align-items: center; margin: 5px auto; 
-}
-
-/* FIX: Emojis independientes del movimiento del disco */
-.emoji-particula { 
-    position: fixed; 
-    top: -50px;
-    pointer-events: none; 
-    z-index: 100; 
-}
-/* Añadir esto al final de player.css */
-
-.cajita {
-    background: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 18px;
+.main-controls-row {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    font-size: 1.6rem;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 2px solid transparent;
+    margin-bottom: 5px;
 }
 
-/* Efecto Retroiluminado al seleccionar */
-.cajita.selected {
-    border-color: var(--primary);
-    transform: scale(1.1);
-    box-shadow: 0 0 20px var(--primary), 0 0 40px rgba(74, 144, 226, 0.3);
-    background: #fff;
+.nav-group { display: flex; align-items: center; gap: 15px; }
+
+/* Botones sin círculos (Siguiente/Anterior) */
+.btn-icon-only {
+    background: none; border: none; cursor: pointer;
+    fill: #777; transition: 0.2s; display: flex; align-items: center;
+}
+.btn-icon-only:hover { fill: var(--primary); transform: scale(1.1); }
+
+/* Botón Play con Círculo (Único resaltado) */
+.btn-play-circle {
+    background: white; border: none; border-radius: 50%;
+    width: 50px; height: 50px; display: flex;
+    justify-content: center; align-items: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1); cursor: pointer;
+}
+.btn-play-circle svg { width: 24px; height: 24px; fill: black; }
+
+/* Temporizador */
+.timer-box { position: relative; }
+.timer-hidden-select {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0; cursor: pointer;
 }
 
-body.dark-mode .cajita.selected {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: #fff;
-    box-shadow: 0 0 20px #fff, 0 0 40px rgba(255, 255, 255, 0.2);
+/* Volumen minimalista abajo */
+.mini-volume {
+    display: flex; align-items: center; gap: 8px;
+    width: 60%; margin: 0 auto; opacity: 0.5;
 }
+#volume-slider { flex: 1; height: 2px; }
+.mini-volume svg { fill: #666; }
+
+.hidden { display: none; }
